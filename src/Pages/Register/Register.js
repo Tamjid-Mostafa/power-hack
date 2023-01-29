@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { setAuthToken } from "../../api/auth";
 import CyanButton from "../../components/CyanButton";
 import hitToast from "../../helpers/hitToast";
 import styles from "../../style";
@@ -9,7 +10,6 @@ import styles from "../../style";
 const Register = () => {
   let [email, setEmail] = useState("");
   const [loginError, setLoginError] = useState("");
-  console.log(loginError);
   /* Form */
   const {
     register,
@@ -17,30 +17,32 @@ const Register = () => {
     handleSubmit,
   } = useForm();
 
-  const handleRegister = () => {
+  const handleRegister = (data) => {
     setLoginError("");
     if (!validate(email)) {
       hitToast("error", "Valid email is required: user@email.domain");
       return;
     } else {
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        password: data.password
+      };
+      console.log(userInfo);
       axios
-        .post("http://localhost:5000/api/registration", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => res.text())
-        .then((data) => JSON.parse(`${data}`))
-        .then((data) => {
-          console.log(data);
+        .post("http://localhost:5000/api/registration", userInfo)
+        .then((res) => {
+          console.log(res);
+          setAuthToken(userInfo);
           hitToast(
-            data.acknowledged ? "success" : "error",
-            "Email Sent Successfully"
+            res.data ? "success" : "error",
+            res.data.message
           );
         })
         .catch((error) => {
-          setLoginError(error.message);
-          hitToast("error", "Something went wrong. Please try again.");
+          console.log(error);
+          setLoginError(error.response.data);
+          hitToast("error", error.response.data);
         });
     }
   };
@@ -57,8 +59,6 @@ const Register = () => {
     }
     return true;
   };
-
-  console.log(errors.email);
   return (
     <div>
       {" "}
@@ -98,7 +98,7 @@ const Register = () => {
                     id=""
                     type="text"
                     required
-                    placeholder="Email"
+                    placeholder="john@doe.com"
                     {...register("email", {
                       required: "Email is required",
                     })}

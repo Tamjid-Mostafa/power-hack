@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 
 const HitToast = (variant, message) => {
-    console.log(variant);
     toast[`${variant}`](message, {
         position: "top-right",
         autoClose: 3000,
