@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import AddBillModal from "./AddBillModal";
 import BillingRow from "./BillingRow";
@@ -8,7 +8,19 @@ import InputFieldwithButton from "./InputFieldwithButton";
 import TextSpinner from "./Spinner/TextSpinner";
 
 const BillingTable = () => {
-  const url = `http://localhost:5000/api/billing-list`;
+  const [ count, setCount ] = useState(1);
+console.log(count)
+
+  function increase () {
+    setCount((prevState) => prevState + 1)
+    refetch()
+  }
+  function decrease () {
+    setCount((prevState) => prevState - 1)
+    refetch()
+  }
+
+  const url = `https://power-hack-server-tamjid-mostafa.vercel.app/api/billing-list?page=${count}&limit=${10}`;
 
   /* Load Seller List  */
   const {
@@ -28,6 +40,7 @@ const BillingTable = () => {
     },
   });
 
+  console.log(bills);
   if (isLoading) {
     return <TextSpinner />
   }
@@ -100,13 +113,13 @@ const BillingTable = () => {
             </span>{" "}
             of{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
-              1000
+              {bills.length}
             </span>
           </span>
           <ul className="inline-flex items-center -space-x-px">
             <li>
-              <a
-                href="#"
+              <button
+                onClick={decrease}
                 className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <span className="sr-only">Previous</span>
@@ -123,52 +136,35 @@ const BillingTable = () => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </a>
+              </button>
             </li>
             <li>
-              <a
+              <button
                 href="#"
                 className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 1
-              </a>
+              </button>
             </li>
             <li>
-              <a
-                href="#"
+              <button
                 className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 2
-              </a>
+              </button>
             </li>
             <li>
-              <a
+              <button
                 href="#"
                 aria-current="page"
                 className="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
               >
                 3
-              </a>
+              </button>
             </li>
             <li>
-              <a
-                href="#"
-                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                ...
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                100
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
+              <button
+              onClick={increase}
                 className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <span className="sr-only">Next</span>
@@ -185,7 +181,7 @@ const BillingTable = () => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </a>
+              </button>
             </li>
           </ul>
         </nav>

@@ -9,13 +9,15 @@ const Header = () => {
   return (
     <nav className="sticky top-0 z-[3] w-full flex py-6 justify-between items-center navbar">
       <>
-        <div className="flex items-center ">
-          <img
-            src={logo}
-            className={`cursor-pointer duration-500 w-48`}
-            alt="logo"
-          />
-        </div>
+        <Link to='/' className="flex items-center ">
+          <>
+            <img
+              src={logo}
+              className={`cursor-pointer duration-500 w-48`}
+              alt="logo"
+            />
+          </>
+        </Link>
       </>
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
@@ -30,8 +32,10 @@ const Header = () => {
             <Link to={`${nav.id}`}>{nav.icon}</Link>
           </li>
         ))}
-        <li className={`font-bold cursor-pointer text-[26px] text-white lg:ml-10 ml-6`}>
-            Paid Total : {"0"}
+        <li
+          className={`font-bold cursor-pointer text-[26px] text-white lg:ml-10 ml-6`}
+        >
+          Paid Total : {"0"}
         </li>
       </ul>
 
@@ -61,10 +65,10 @@ const Header = () => {
               </li>
             ))}
             <li
-                className={`font-poppins font-medium cursor-pointer text-[16px] mt-4`}
-              >
-                 Paid Total : {"0"}
-              </li>
+              className={`font-poppins font-medium cursor-pointer text-[16px] mt-4`}
+            >
+              Paid Total : {"0"}
+            </li>
           </ul>
         </div>
       </div>

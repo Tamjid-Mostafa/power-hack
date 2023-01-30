@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../context/AuthProvider";
 import hitToast from "../helpers/hitToast";
 import CyanButton from "./CyanButton";
 export default function AddBillModal({refetch}) {
@@ -16,19 +15,19 @@ export default function AddBillModal({refetch}) {
     formState: { errors },
     handleSubmit,
   } = useForm();
-
+/* 
   const auth = useAuth();
-  const { user } = auth;
+  const { user } = auth; */
   const handleAddBill = (data) => {
     setError("");
     const billingInfo = {
-      name: user?.name,
-      email: user?.email,
+      name: data.name,
+      email: data.email,
       phone: data.tel,
       amount: data.amount,
     };
     axios
-      .post("http://localhost:5000/api/add-billing", billingInfo)
+      .post("https://power-hack-server-tamjid-mostafa.vercel.app/api/add-billing", billingInfo)
       .then((res) => {
         console.log(res);
         setBillInfo(res);

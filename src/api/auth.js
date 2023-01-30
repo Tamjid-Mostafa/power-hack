@@ -4,7 +4,7 @@ console.log(user)
     const currentUser = {
         email: user?.email,
     }
-    const url = `http://localhost:5000/user/${user?.email}`
+    const url = `https://power-hack-server-tamjid-mostafa.vercel.app/user/${user?.email}`
     console.log(url);
     fetch(url, {
         method: 'PUT',

@@ -38,7 +38,7 @@ const Login = () => {
       };
       console.log(userInfo);
       axios
-        .post("http://localhost:5000/api/login", userInfo)
+        .post("https://power-hack-server-tamjid-mostafa.vercel.app/api/login", userInfo)
         .then((res) => {
           console.log(res.data);
           navigate(from, { replace: true });

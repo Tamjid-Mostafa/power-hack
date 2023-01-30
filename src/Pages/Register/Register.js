@@ -36,7 +36,7 @@ const Register = () => {
       };
       console.log(userInfo);
       axios
-        .post("http://localhost:5000/api/registration", userInfo)
+        .post("https://power-hack-server-tamjid-mostafa.vercel.app/api/registration", userInfo)
         .then((res) => {
           const user = res.data.user;
           navigate(from, { replace: true });
