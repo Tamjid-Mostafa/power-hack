@@ -10,7 +10,8 @@ export const AuthProvider = ({ children }) => {
     const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
       const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
+      console.log(foundUser?.result)
+      setUser(foundUser?.result);
     }
   }, []);
   

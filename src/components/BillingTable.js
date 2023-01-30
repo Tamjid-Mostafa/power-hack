@@ -1,26 +1,53 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import axios from "axios";
 import React from "react";
+import { useQuery } from "react-query";
 import AddBillModal from "./AddBillModal";
+import BillingRow from "./BillingRow";
 import InputFieldwithButton from "./InputFieldwithButton";
+import TextSpinner from "./Spinner/TextSpinner";
 
 const BillingTable = () => {
+  const url = `http://localhost:5000/api/billing-list`;
+
+  /* Load Seller List  */
+  const {
+    data: bills = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["bills"],
+    queryFn: async () => {
+      const res = await axios.get(url, {
+        headers: {
+          "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("power-hack")}`,
+        },
+      });
+      return res.data;
+    },
+  });
+
+  if (isLoading) {
+    return <TextSpinner />
+  }
+
   return (
     <div>
       <div className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <div className="">
-            <div className="flex items-center justify-between py-4">
-              <div className="pl-4 flex items-center">
-                <div className=" mr-10 text-xl font-bold">Billings</div>
-                <div className="flex items-center">
-                  <InputFieldwithButton />
-                </div>
+        <div className="">
+          <div className="flex items-center justify-between py-4">
+            <div className="pl-4 flex items-center">
+              <div className=" mr-10 text-xl font-bold">Billings</div>
+              <div className="flex items-center">
+                <InputFieldwithButton />
               </div>
-              <AddBillModal />
             </div>
+            <AddBillModal refetch={refetch} />
           </div>
         </div>
+      </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -57,47 +84,9 @@ const BillingTable = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label for="checkbox-table-search-1" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                11023844
-              </th>
-              <td className="px-6 py-4">John Doe</td>
-              <td className="px-6 py-4">name@domain.com</td>
-              <td className="px-6 py-4">+8801234763743</td>
-              <td className="px-6 py-4">$999</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit
-                </a>
-                <span className="ml-2">
-                  |
-                </span>
-                <a
-                  href="#"
-                  className="ml-2 font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Delete
-                </a>
-              </td>
-            </tr>
+            {bills.map((bill) => (
+              <BillingRow key={bill._id} bill={bill} />
+            ))}
           </tbody>
         </table>
         <nav

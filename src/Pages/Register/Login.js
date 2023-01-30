@@ -26,6 +26,7 @@ const Login = () => {
     } = useForm();
 
   const handleLogin = (data) => {
+    localStorage.clear();
     setLoginError("");
     if (!validate(email)) {
       hitToast("error", "Valid email is required: user@email.domain");
@@ -35,13 +36,13 @@ const Login = () => {
         email: data.email,
         password: data.password
       };
-      console.log(userInfo)
+      console.log(userInfo);
       axios
         .post("http://localhost:5000/api/login", userInfo)
         .then((res) => {
           console.log(res.data);
           navigate(from, { replace: true });
-          setAuthToken(userInfo);
+          setAuthToken(res.data);
           hitToast(
             res.data.success ? "success" : "error",
             res.data.message
@@ -125,10 +126,12 @@ const Login = () => {
                   {loginError && <p className="text-red-600">{loginError}</p>}
                   <button type="reset" className="-mr-3 w-max p-3">
                     <span className="text-sm tracking-wide text-sky-600 dark:text-sky-400">
-                      Already have an account?{" "}
-                      <Link className="text-secondary" to="/log-in">
-                        Log In
-                      </Link>
+                      <Link
+                      to="/register"
+                      className="text-sm tracking-wide text-sky-600 dark:text-sky-400"
+                    >
+                      Create new account
+                    </Link>
                     </span>
                   </button>
                 </div>

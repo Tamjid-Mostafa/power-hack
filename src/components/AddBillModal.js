@@ -1,13 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../context/AuthProvider";
 import hitToast from "../helpers/hitToast";
 import CyanButton from "./CyanButton";
-export default function AddBillModal() {
+export default function AddBillModal({refetch}) {
   const [show, setShow] = useState(false);
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [billInfo, setBillInfo] = useState("");
   /* Form */
   const {
     register,
@@ -15,20 +17,22 @@ export default function AddBillModal() {
     handleSubmit,
   } = useForm();
 
+  const auth = useAuth();
+  const { user } = auth;
   const handleAddBill = (data) => {
-    console.log(data);
     setError("");
-
     const billingInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
+      name: user?.name,
+      email: user?.email,
+      phone: data.tel,
+      amount: data.amount,
     };
-    console.log(billingInfo);
     axios
       .post("http://localhost:5000/api/add-billing", billingInfo)
       .then((res) => {
         console.log(res);
+        setBillInfo(res);
+        refetch()
         hitToast(res.data ? "success" : "error", res.data.message);
       })
       .catch((error) => {
@@ -82,7 +86,6 @@ export default function AddBillModal() {
               <form
                 onSubmit={handleSubmit(handleAddBill)}
                 className="space-y-6"
-                action="#"
               >
                 <div>
                   <label
@@ -143,6 +146,7 @@ export default function AddBillModal() {
                     type="tel"
                     placeholder="01345678901"
                     {...register("tel", {
+                      required: "Valid phone no. required",
                       maxLength: 11,
                       pattern: /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/i,
                     })}
@@ -165,7 +169,9 @@ export default function AddBillModal() {
                   <input
                     type="text"
                     placeholder="amount"
-                    {...register("amount", { pattern: /^[1-9]\d*$/i })}
+                    {...register("amount", { 
+                      required: "Amount required",
+                      pattern: /^[1-9]\d*$/i })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   />
                   {errors.amount && (

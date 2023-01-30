@@ -1,15 +1,21 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { setAuthToken } from "../../api/auth";
 import CyanButton from "../../components/CyanButton";
+
 import hitToast from "../../helpers/hitToast";
+
 import styles from "../../style";
 
 const Register = () => {
   let [email, setEmail] = useState("");
   const [loginError, setLoginError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
   /* Form */
   const {
     register,
@@ -32,9 +38,10 @@ const Register = () => {
       axios
         .post("http://localhost:5000/api/registration", userInfo)
         .then((res) => {
-          console.log(res);
-          setAuthToken(userInfo);
-          localStorage.setItem('user', userInfo)
+          const user = res.data.user;
+          navigate(from, { replace: true });
+          setAuthToken(user);
+          console.log(user);
           hitToast(
             res.data ? "success" : "error",
             res.data.message
