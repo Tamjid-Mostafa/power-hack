@@ -30,7 +30,7 @@ const Login = () => {
       };
       console.log(userInfo)
       axios
-        .post("http://localhost:5000/api/login", userInfo)
+        .post("https://power-hack-server-blond.vercel.app/api/login", userInfo)
         .then((res) => {
           console.log(res.data.success);
           setAuthToken(userInfo);

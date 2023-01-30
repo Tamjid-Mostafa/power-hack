@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { setAuthToken } from "../../api/auth";
@@ -30,7 +30,7 @@ const Register = () => {
       };
       console.log(userInfo);
       axios
-        .post("http://localhost:5000/api/registration", userInfo)
+        .post("https://power-hack-server-blond.vercel.app/api/registration", userInfo)
         .then((res) => {
           console.log(res);
           setAuthToken(userInfo);
