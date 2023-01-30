@@ -30,10 +30,11 @@ const Register = () => {
       };
       console.log(userInfo);
       axios
-        .post("https://power-hack-server-blond.vercel.app/api/registration", userInfo)
+        .post("http://localhost:5000/api/registration", userInfo)
         .then((res) => {
           console.log(res);
           setAuthToken(userInfo);
+          localStorage.setItem('user', userInfo)
           hitToast(
             res.data ? "success" : "error",
             res.data.message
@@ -79,9 +80,7 @@ const Register = () => {
                   <input
                     id=""
                     type="text"
-                    placeholder="Your Name"
-                    required
-                    {...register("name", {
+                    placeholder="Your Name"                    {...register("name", {
                       required: "Full name is required",
                     })}
                     className="focus:outline-none block w-full rounded-md border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-600 transition duration-300 invalid:ring-2 invalid:ring-red-400 focus:ring-2 focus:ring-cyan-300"
@@ -96,12 +95,9 @@ const Register = () => {
                 <div className="relative before:absolute before:bottom-0 before:h-0.5 before:left-0 before:origin-right focus-within:before:origin-left before:right-0 before:scale-x-0 before:m-auto before:bg-sky-400 dark:before:bg-sky-800 focus-within:before:!scale-x-100 focus-within:invalid:before:bg-red-400 before:transition before:duration-300">
                   <input
                     id=""
-                    type="text"
-                    required
-                    placeholder="john@doe.com"
-                    {...register("email", {
-                      required: "Email is required",
-                    })}
+                    type="email"
+                    placeholder="name@domain.com"
+                    {...register("email", {required: "Email is required", pattern: /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/i})}
                     onChange={(e) => setEmail(e.target.value)}
                     className="focus:outline-none block w-full rounded-md border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-600 transition duration-300 invalid:ring-2 invalid:ring-red-400 focus:ring-2 focus:ring-cyan-300"
                   />
@@ -117,9 +113,7 @@ const Register = () => {
                     <input
                       id=""
                       type="Your password"
-                      placeholder="Password"
-                      required
-                      {...register("password", {
+                      placeholder="Password"                      {...register("password", {
                         required: "Password is required",
                       })}
                       className="focus:outline-none block w-full rounded-md border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-600 transition duration-300 invalid:ring-2 invalid:ring-red-400 focus:ring-2 focus:ring-cyan-400"

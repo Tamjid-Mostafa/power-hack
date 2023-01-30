@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { setAuthToken } from '../../api/auth';
 import CyanButton from '../../components/CyanButton'
 import hitToast from '../../helpers/hitToast';
@@ -11,6 +11,13 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
+
+
     /* Form */
     const {
       register,
@@ -30,14 +37,16 @@ const Login = () => {
       };
       console.log(userInfo)
       axios
-        .post("https://power-hack-server-blond.vercel.app/api/login", userInfo)
+        .post("http://localhost:5000/api/login", userInfo)
         .then((res) => {
-          console.log(res.data.success);
+          console.log(res.data);
+          navigate(from, { replace: true });
           setAuthToken(userInfo);
           hitToast(
             res.data.success ? "success" : "error",
             res.data.message
           );
+
         })
         .catch((error) => {
           console.log(error);
@@ -81,7 +90,7 @@ const Login = () => {
                     id=""
                     type="text"
                     required
-                    placeholder="john@doe.com"
+                    placeholder="name@domain.com"
                     {...register("email", {
                       required: "Email is required",
                     })}

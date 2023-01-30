@@ -77,7 +77,7 @@ const BillingTable = () => {
                 11023844
               </th>
               <td className="px-6 py-4">John Doe</td>
-              <td className="px-6 py-4">john@doe.com</td>
+              <td className="px-6 py-4">name@domain.com</td>
               <td className="px-6 py-4">+8801234763743</td>
               <td className="px-6 py-4">$999</td>
               <td className="px-6 py-4">
